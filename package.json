@@ -1,5 +1,6 @@
 {
   "name": "chatgpt-desktop",
+  "productName": "ChatGPT Desktop",
   "version": "1.0.0-dev",
   "description": "ChatGPT electron desktop",
   "main": "dist/main.js",
@@ -7,17 +8,40 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsc && electron .",
+    "build-linux": "electron-builder build --linux",
     "lint": "eslint -c .eslintrc --ext .ts ./src"
   },
   "dependencies": {
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
     "electron": "^25.0.1",
+    "electron-builder": "^23.6.0",
     "eslint": "^8.41.0",
     "prettier": "^2.8.8",
     "typescript": "5.0.4"
+  },
+  "build": {
+    "appId": "ru.magomedcoder.chatgpt",
+    "files": [
+      "dist/",
+      "node_modules/"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "linux": {
+      "icon": "resources/icon.png",
+      "target": [
+        "AppImage",
+        "deb",
+        "snap"
+      ],
+      "description": "ChatGPT electron desktop",
+      "category": "Network;Chat"
+    }
   }
 }

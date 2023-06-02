@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
 import { Configuration, OpenAIApi } from 'openai'
+import { Database, RunResult } from 'sqlite3'
 
 const configuration = new Configuration({
   apiKey: ''
@@ -52,4 +53,23 @@ const getChatCompletionHandler: chatCompletionHandler = async (electron, value) 
   }
 }
 
+const db = new Database('chatgpt.sqlite')
+
+db.serialize(() => {
+  db.run('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, role VARCHAR(255) NOT NULL, content TEXT NOT NULL)')
+})
+
+const DBRunHandler: getRunHandler = async (electron, sql: string, callback?: (this: RunResult, err: Error | null) => void) => {
+  db.run(sql, callback)
+  return db
+}
+
+const DBAllHandler: getAllHandler = async (electron, sql: string) => {
+  return new Promise((resolve: any) => {
+    db.all(sql, (err: any, rows: any) => resolve(rows))
+  })
+}
+
 ipcMain.handle('chat-completion-ipc', getChatCompletionHandler)
+ipcMain.handle('db-run-ipc', DBRunHandler)
+ipcMain.handle('db-all-ipc', DBAllHandler)
