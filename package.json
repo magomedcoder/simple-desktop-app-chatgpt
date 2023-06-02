@@ -1,0 +1,14 @@
+{
+  "name": "chatgpt-desktop",
+  "version": "1.0.0",
+  "description": "ChatGpt electron desktop",
+  "main": "main.js",
+  "repository": "https://github.com/magomedcoder/chatgpt-electron-desktop",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^25.0.1"
+  }
+}
