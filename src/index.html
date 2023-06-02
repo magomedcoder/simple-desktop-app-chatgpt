@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset='UTF-8' />
   <title>ChatGPT</title>
   <meta content="default-src 'self'; script-src 'self';" http-equiv='Content-Security-Policy'>
 </head>
 <body>
 <h1>ChatGPT</h1>
+<div id='chat'>
+  <div id='chat-messages'>
+    <form id='chat-form' method='post'>
+      <input type='text' name='message' maxlength='500' autocomplete='off'>
+      <button type='submit'>Отправить</button>
+    </form>
+  </div>
+</div>
 <script src='../dist/renderer.js'></script>
 </body>
 </html>

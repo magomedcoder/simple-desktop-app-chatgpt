@@ -37,18 +37,18 @@ app.on('window-all-closed', () => {
   }
 })
 
-const getChatCompletionHandler: chatCompletionHandler = async () => {
+const getChatCompletionHandler: chatCompletionHandler = async (electron, value) => {
   try {
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [{
         role: 'user',
-        content: 'Привет'
+        content: value
       }]
     })
-    return completion.data.choices[0].message.content
+    return { choices: completion.data.choices }
   } catch (e) {
-    return 'Error'
+    return { error: 'Error' }
   }
 }
 
