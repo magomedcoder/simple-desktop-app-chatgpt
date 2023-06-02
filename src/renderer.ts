@@ -1,5 +1,5 @@
 const run = async () => {
-  return await electron.home.get()
+  return await electron.chatGPTApi.getChatCompletion()
 }
 
 run().then((r: string) => {

@@ -1,9 +1,9 @@
 type Electron = {
-  home: {
-    get: () => Promise<string>
+  chatGPTApi: {
+    getChatCompletion: () => Promise<string>
   }
 }
 
 declare let electron: Electron
 
-type homeHandler = () => Promise<string>
+type chatCompletionHandler = () => Promise<string>

@@ -1,9 +1,9 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('electron', {
-  home: {
-    async get() {
-      return await ipcRenderer.invoke('home-ipc')
+  chatGPTApi: {
+    async getChatCompletion() {
+      return await ipcRenderer.invoke('chat-completion-ipc')
     }
   }
 })

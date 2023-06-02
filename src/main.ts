@@ -1,5 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
+import { Configuration, OpenAIApi } from 'openai'
+
+const configuration = new Configuration({
+  apiKey: ''
+})
+
+const openai = new OpenAIApi(configuration)
 
 const createWindow = (): void => {
   const win = new BrowserWindow({
@@ -30,8 +37,19 @@ app.on('window-all-closed', () => {
   }
 })
 
-const getHomeHandler: homeHandler = async () => {
-  return 'Test'
+const getChatCompletionHandler: chatCompletionHandler = async () => {
+  try {
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [{
+        role: 'user',
+        content: 'Привет'
+      }]
+    })
+    return completion.data.choices[0].message.content
+  } catch (e) {
+    return 'Error'
+  }
 }
 
-ipcMain.handle('home-ipc', getHomeHandler)
+ipcMain.handle('chat-completion-ipc', getChatCompletionHandler)
