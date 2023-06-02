@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
 
 const createWindow = (): void => {
@@ -7,7 +7,10 @@ const createWindow = (): void => {
     height: 700,
     title: 'ChatGPT',
     autoHideMenuBar: true,
-    resizable: false
+    resizable: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
   })
   win.loadFile(path.join(__dirname, '../src/index.html'))
 }
@@ -26,3 +29,9 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+const getHomeHandler: homeHandler = async () => {
+  return 'Test'
+}
+
+ipcMain.handle('home-ipc', getHomeHandler)
