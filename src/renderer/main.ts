@@ -4,7 +4,12 @@ const setDB = async (data: Message): Promise<Message> => {
 }
 
 const send = async (data: Message) => {
-  const result = await electron.chatGPTApi.getChatCompletion(data.content)
+  const messages = await electron.chatGPTDB.all('SELECT role, content FROM messages ORDER BY id ASC LIMIT 20')
+  messages.push({
+    role: 'user',
+    content: data.content
+  })
+  const result = await electron.chatGPTApi.getChatCompletion(messages)
   const res = result.choices[0].message
   await setDB(data)
   return await setDB(res)

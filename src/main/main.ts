@@ -3,6 +3,12 @@ import * as path from 'path'
 import { Configuration, OpenAIApi } from 'openai'
 import { Database, RunResult } from 'sqlite3'
 
+const db = new Database('chatgpt.sqlite')
+
+db.serialize(() => {
+  db.run('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, role VARCHAR(255) NOT NULL, content TEXT NOT NULL)')
+})
+
 const configuration = new Configuration({
   apiKey: ''
 })
@@ -20,7 +26,8 @@ const createWindow = (): void => {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-  win.loadFile(path.join(__dirname, '../src/index.html'))
+  win.loadFile(path.join(__dirname, '../../src/renderer/index.html'))
+  win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -38,26 +45,17 @@ app.on('window-all-closed', () => {
   }
 })
 
-const getChatCompletionHandler: chatCompletionHandler = async (electron, value) => {
+const getChatCompletionHandler: chatCompletionHandler = async (electron, message) => {
   try {
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
-      messages: [{
-        role: 'user',
-        content: value
-      }]
+      messages: [...message]
     })
     return { choices: completion.data.choices }
   } catch (e) {
     return { error: 'Error' }
   }
 }
-
-const db = new Database('chatgpt.sqlite')
-
-db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, role VARCHAR(255) NOT NULL, content TEXT NOT NULL)')
-})
 
 const DBRunHandler: getRunHandler = async (electron, sql: string, callback?: (this: RunResult, err: Error | null) => void) => {
   db.run(sql, callback)

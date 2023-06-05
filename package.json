@@ -1,10 +1,10 @@
 {
-  "name": "chatgpt-desktop",
+  "name": "simple-desktop-app-chatgpt",
   "productName": "ChatGPT Desktop",
-  "version": "1.0.0-dev",
+  "version": "1.0.0",
   "description": "ChatGPT electron desktop",
-  "main": "dist/main.js",
-  "repository": "https://github.com/magomedcoder/chatgpt-electron-desktop",
+  "main": "dist/main/main.js",
+  "repository": "https://github.com/magomedcoder/simple-desktop-app-chatgpt.git",
   "license": "MIT",
   "scripts": {
     "dev": "tsc && electron .",
